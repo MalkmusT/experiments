@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <assert.h>
 
@@ -28,22 +29,11 @@ void matrix_test ( Matrix<double> &m )
   m(v1, v2);
 
   std::cout<<m <<std::endl;
-  {
-    std::ofstream file;
-    file.open( "tmp2" );
-    file << m << std::endl;
-    file.close();
-  }
-  {
-    std::ifstream file;
-    file.open( "tmp2" );
-    file >> mcopy;
-    file.close();
-  }
+  std::stringstream file;
+  file << m ;
+  file >> mcopy;
 
   std::cout<<mcopy <<std::endl;
-
-//  std::remove( "tmp" );
 }
 
 void vector_test ( Vector<double> &v )
@@ -55,20 +45,9 @@ void vector_test ( Vector<double> &v )
   v_copy.resize( 1 );
   assert( v_copy.size() != v.size() );
 
-  {
-    std::ofstream file;
-    file.open( "tmp" );
-    file << v << std::endl;
-    file.close();
-  }
-  {
-    std::ifstream file;
-    file.open( "tmp" );
-    file >> v_copy;
-    file.close();
-  }
-
-  std::remove( "tmp" );
+  std::stringstream file;
+  file << v;
+  file >> v_copy;
 }
 
 void sigmoid_test ( double a, const Vector< double> &va, const Matrix< double> &ma)

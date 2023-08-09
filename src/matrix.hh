@@ -100,6 +100,7 @@ private:
 template<class T>
 std::ostream &operator<<(std::ostream &os, const Matrix<T> &input)
 {
+  os << input.rows() << " " <<input.cols() << std::endl;
   for (std::size_t i = 0; i < input.size(); ++i) {
     os << input[i] << std::endl;
   }
@@ -113,13 +114,12 @@ std::ostream &operator<<(std::ostream &os, const Matrix<T> &input)
 template< class T>
 std::istream &operator>>(std::istream &is, Matrix<T> &out )
 {
-  out.data().data().clear();
-  typename Matrix<T>::VectorType tmp;
-
-  while( is >> tmp ) { 
-    std::cout<<tmp <<std::endl;
-    out.data().data().push_back(tmp); 
-  }
+  std::size_t r,c;
+  is >> r >> c;
+  out.resize(r,c);
+  for( std::size_t i =0; i < r; ++i)
+    for( std::size_t j =0; j < c; ++j)
+      is >> out[i][j];
   return is;
 }
 

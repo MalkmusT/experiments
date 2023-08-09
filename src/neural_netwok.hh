@@ -15,7 +15,7 @@
 
 
 template< class T >
-class NNetwork< T >
+class NNetwork
 {
     typedef NNetwork<T> ThisType;
     public:
@@ -30,17 +30,27 @@ class NNetwork< T >
         this->resize( rows, cols );
     }
 
+    NNetwork ( const DataType &weights, const ObjectType &bias )
+    :   weights_( weights ),
+        biases_( bias )
+    {}
+
     template< class Lambda >
     void init ( Lambda l ) 
     {
         for(std::size_t j = 0; j <  weights_.columns(); ++j ) 
         {           
-            biases_[i][j] = l(0)(j);
+            biases_[j] = l(j);
             for(std::size_t k = 0; k <  weights_.rows(); ++k )
-                weights_[k][j] = l(0)(k,j);            
+                weights_[k][j] = l(k,j);            
         }
     }
 
+    DataType & weights () { return weights_; }
+    const DataType & weights () const { return weights_; }
+
+    ObjectType& bias () { return biases_; }
+    const ObjectType& bias () const { return biases_; }
 
     void resize ( std::size_t rows, std::size_t cols ) 
     {
@@ -63,17 +73,18 @@ class NNetwork< T >
     // compute new weights an biases using MQF 
     void feedBackward ( const ArgumentType &arg, const ObjectType &dest )    
     {
+        T alpha = 0.5;
         ObjectType help(dest);
         weights_(arg, help);
         help -= biases_;
-        weights_ -= alpha * (sigmoid( help) * sig_prime( help)) 
+
+        weights_ -= alpha * (sigmoid( help) * sig_prime( help)); 
     }
 
     private:
     DataType weights_;
     ObjectType biases_;
 };
-
 
 
 
@@ -145,4 +156,20 @@ class NNetwork
 };
 **/
 
+
+template<class T>
+std::ostream &operator<<(std::ostream &os, const NNetwork<T> &input)
+{
+    os << input.weights() << std::endl;
+    os << input.bias() << std::endl;
+    return os;
+}
+
+template<class T>
+std::istream &operator>>(std::istream &is, NNetwork<T> &output)
+{
+    is >> output.weigths();
+    is >> output.bias();
+    return is;
+}
 #endif // #ifndef NEURAL_NETWORK_HH

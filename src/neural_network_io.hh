@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <random>
 
 #include "vector.hh"
 #include "matrix.hh"
@@ -72,16 +73,17 @@ class NN_Random_Init
   typedef Vector<T> BiasType;
 
 public:
-  NN_Random_Init ( std::size_t rows, std::size_t cols, std::size_t seed = 1 ) :
+  NN_Random_Init ( std::size_t rows, std::size_t cols, T max ) :
     w_( rows, cols ),
     b_( rows )
   {
-    std::srand(seed);
+    std::default_random_engine generator;
+    std::uniform_real_distribution<double> distribution(-max,max);
     for( std::size_t i = 0; i <rows; ++i )
     {
-      b_[i] = std::rand();
+      b_[i] = distribution(generator);
       for( std::size_t j = 0; j < cols; ++j )
-        w_[i][j] = std::rand();
+        w_[i][j] = distribution(generator);
     }
   }
 

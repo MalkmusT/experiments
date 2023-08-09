@@ -52,20 +52,6 @@ void vector_test ( Vector<double> &v )
   file >> v_copy;
 }
 
-void sigmoid_test ( double a, const Vector< double> &va, const Matrix< double> &ma)
-{
-  double a_copy(a);
-  Vector< double > v_copy(va);
-  Matrix< double > m_copy(ma);
-  sigmoid( a_copy );
-  sigmoid( v_copy );
-  sigmoid( m_copy );
-
-  sig_prime( a_copy );
-  sig_prime( v_copy );
-  sig_prime( m_copy );
-}
-
 void test_nn ( NNetwork< double > &nn )
 {
   std::size_t rows = 16, cols = 5;
@@ -78,40 +64,16 @@ void test_nn ( NNetwork< double > &nn )
 
     NN_Random_Init<double> initRand(rows,cols, 42);
     nn.init( initRand );
+    std::cout << nn.weights() << std::endl;
 }
 
 
 
 int main ( int argc, char** argv )
 {
-    Matrix<double> m(2,4);
-    for(std::size_t i=0;i<2;++i)
-        for(std::size_t j=0;j<4;++j)
-            m[i][j] = i+j;
-    matrix_test( m );
-
-    Vector<double> v(15);
-    for(std::size_t i=0;i<15;++i)
-      v[i] = i;
-    vector_test(v);
-
-    double a =123;
-    sigmoid_test( a, v, m );
 
     NNetwork< double > nn(4,2);
     test_nn(nn);
-
-    std::string alpha_test_str = "uf 123 nawnnv48qwawoieh";
-    for ( auto e : alpha_test_str)
-      if( e != AlphaLexer::backward( AlphaLexer::forward(e) ) )
-        std::cout<< e << "!=" << AlphaLexer::backward( AlphaLexer::forward(e) ) << std::endl;
-    std::string alpha_res = AlphaLexer::backward( AlphaLexer::forward( alpha_test_str ) );
-
-    std::string hex_test_str = "1234567890abcdef";
-    for ( auto e : hex_test_str)
-      if ( e != HexLexer::backward( HexLexer::forward(e) ) ) 
-        std::cout<< e <<"!="<<HexLexer::backward( HexLexer::forward(e) ) <<std::endl ; 
-    std::string hex_res = HexLexer::backward( HexLexer::forward( alpha_test_str ) );
 
     return 0;
 }

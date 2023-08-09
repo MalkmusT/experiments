@@ -18,17 +18,17 @@ struct BasicLexer
 
   static WordType backward ( const IndexType &is )
   {
-    WordType ret; ret.resize(is.size());
-    for(std::size_t i =0; i< is.size();++i)
-      ret[i] = Alphabet::backward( is[i] );
+    WordType ret; ret.reserve(is.size());
+    for( auto &e : is )
+      ret.push_back(e);
     return ret;
   }
 
   static IndexType forward ( const WordType &is )
   {
-    IndexType ret; ret.resize(is.size());
-    for(std::size_t i =0; i< is.size();++i)
-      ret[i] = Alphabet::forward( is[i] );
+    IndexType ret;  ret.reserve(is.size());
+    for( auto &e : is )
+      ret.push_back(e);
     return ret;
   }
 
@@ -96,17 +96,17 @@ struct HashLexer
 
   WordType backward ( const IndexType &is ) const
   {
-    WordType ret; ret.resize(is.size());
-    for(std::size_t i =0; i< is.size();++i)
-      ret[i] = backward( is[i] );
+    WordType ret; ret.reserve(is.size());
+    for( auto &e : is )
+      ret.push_back(e);
     return ret;
   }
 
   IndexType forward ( const WordType &is ) const
   {
-    IndexType ret; ret.resize(is.size());
-    for(std::size_t i =0; i< is.size();++i)
-      ret[i] = forward( is[i] );
+    IndexType ret;  ret.reserve(is.size());
+    for( auto &e : is )
+      ret.push_back(e);
     return ret;
   }
 

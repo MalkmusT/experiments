@@ -15,7 +15,7 @@
 
 
 
-template< class T >
+template< class T, class TransferFunction = Sigmoid >
 class NNetwork
 {
   typedef NNetwork<T> ThisType;
@@ -62,7 +62,7 @@ public:
   {
       weights_( arg, dest );
       dest -= biases_;
-      sigmoid(dest);
+      tf_( dest );
   }
 
   void feedForward ( const ArgumentType &arg, ObjectType &dest ) const
@@ -78,13 +78,15 @@ public:
       weights_(arg, help);
       help -= biases_;
 
-      weights_ -= alpha * sig_sig_prime( help);
-      biases_ -= alpha * ( sigmoid( help) * sig_prime( help) );
+      weights_ -= alpha * dtf_( help);
+      biases_ -= alpha * ( dtf_( help) );
   }
 
 private:
   DataType weights_;
   ObjectType biases_;
+  TransferFunction tf_;
+  typename TransferFunction::Derivativ dtf_;
 };
 
 

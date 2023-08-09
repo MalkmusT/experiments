@@ -3,15 +3,16 @@ CPPFLAGS=-g -std=c++11 -Wall -DNDEBUG
 INCLUDES=-I ../src
 
 
-main: main.cpp
-	g++ ${CPPFLAGS} ${INCLUDES} main.cpp -o main
+test_%: test_%.cpp
+	g++ ${CPPFLAGS} ${INCLUDES} test_$*.cpp -o test_$*
 
+all: test
 
-all: main
-
-test: main
-	./main
-
+test: test_vector test_matrix test_nn test_lexer test_sigmoid
+	./test_vector
+	./test_matrix
+	./test_nn
+	./test_lexer
 
 clean:
-	rm main
+	rm -f test_vector test_matrix test_nn test_lexer test_sigmoid

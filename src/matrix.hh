@@ -25,6 +25,8 @@ class Matrix
     void resize ( std::size_t n, std::size_t m ) 
     {
         rows_.resize( n, VectorType(m,0));
+        n_ = n;
+        m_ = m;
     }
 
     std::size_t size () const { return n_;}

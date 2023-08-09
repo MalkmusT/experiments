@@ -38,7 +38,7 @@ class NNetwork
     template< class Lambda >
     void init ( Lambda l ) 
     {
-        for(std::size_t j = 0; j <  weights_.columns(); ++j ) 
+        for(std::size_t j = 0; j <  weights_.cols(); ++j ) 
         {           
             biases_[j] = l(j);
             for(std::size_t k = 0; k <  weights_.rows(); ++k )
@@ -78,7 +78,8 @@ class NNetwork
         weights_(arg, help);
         help -= biases_;
 
-        weights_ -= alpha * (sigmoid( help) * sig_prime( help)); 
+        weights_ -= alpha * (sigmoid( help) * sig_prime( help) ); 
+        biases_ -= alpha * ( sigmoid( help) * sig_prime( help) ); 
     }
 
     private:

@@ -1,4 +1,4 @@
-CPPFLAGS=-std=c++11 -Wall -DNDEBUG
+CPPFLAGS=-g -std=c++11 -Wall -DNDEBUG
 
 INCLUDES=-I ../src
 

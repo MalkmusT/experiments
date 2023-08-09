@@ -2,68 +2,74 @@
 #define LEXER_HH
 
 
+#include <map>
+#include <string>
+#include <vector>
+
+
+template< class Alphabet >
+struct BasicLexer 
+{
+  typedef std::string WordType;
+  typedef std::vector< std::size_t > IndexType;
+
+  static std::size_t forward ( char i ) { return Alphabet::forward( i ); }
+  static char backward ( std::size_t i ) { return Alphabet::backward( i ); }
+
+  static WordType backward ( const IndexType &is )
+  {
+    WordType ret; ret.resize(is.size());
+    for(std::size_t i =0; i< is.size();++i)
+      ret[i] = Alphabet::backward( is[i] );
+    return ret;
+  }
+
+  static IndexType forward ( const WordType &is )
+  {
+    IndexType ret; ret.resize(is.size());
+    for(std::size_t i =0; i< is.size();++i)
+      ret[i] = Alphabet::forward( is[i] );
+    return ret;
+  }
+
+  // thoese two should differ bewtween the implementations
+  static std::size_t size() { return Alphabet::size; }
+};
+
+
 // convert [abc..012..9 ] to e in R^37
 
-struct AlphaLexer
+struct A2zPdAlphabet
 {
-  
-  static constexpr std::size_t size() { return 37; }
-  static constexpr char backward ( std::size_t i ) { return vals_[i]; }
-
-  static std::size_t forward ( char in ) {
-    for( std::size_t i = 0; i < size(); ++i )
-      if ( vals_[i] == in ) return i;
+  static const std::size_t size = 37;
+  static const char backward ( std::size_t in ) { return vals_[in]; }
+  static const std::size_t forward ( char in ) { 
+    for( std::size_t i =0;i< size; ++i) 
+      if (vals_[i] == in ) return i;
     return 0;
-  }
-
-  static std::vector<char> backward ( const std::vector<std::size_t> &is )
-  {
-    std::vector<char> ret(is.size());
-    for(std::size_t i =0; i< is.size();++i)
-      ret[i] = AlphaLexer::backward( is[i] );
-    return ret;
-  }
-
-  static std::vector<std::size_t > forward ( const std::vector<char> &is )
-  {
-    std::vector<std::size_t> ret(is.size());
-    for(std::size_t i =0; i< is.size();++i)
-      ret[i] = AlphaLexer::forward( is[i] );
-    return ret;
   }
 
   static constexpr char* vals_ = "0123456789abcdefghijklmnopqrstuvwxyz ";
 };
 
 
-struct HexLexer
+
+typedef BasicLexer< A2zPdAlphabet > AlphaLexer;
+
+
+struct HexAlphabet
 {
-  static constexpr std::size_t size() { return 16; }
-  static constexpr char backward (std::size_t i) { return vals_[i]; } 
-  static std::size_t forward (char in )
-  {
-    for( std::size_t i = 0; i < size(); ++i )
-      if ( vals_[i] == in ) return i;
+
+  static const std::size_t size = 16;
+  static const char backward ( std::size_t in ) { return vals_[in]; }
+  static const std::size_t forward ( char in ) { 
+    for( std::size_t i =0;i< size; ++i) 
+      if (vals_[i] == in ) return i;
     return 0;
-  }
-
-  static std::vector<char> backward ( const std::vector<std::size_t> &is )
-  {
-    std::vector<char> ret(is.size());
-    for(std::size_t i =0; i< is.size();++i)
-      ret[i] = HexLexer::backward( is[i] );
-    return ret;
-  }
-
-  static std::vector<std::size_t > forward ( const std::vector<char> &is )
-  {
-    std::vector<std::size_t> ret(is.size());
-    for(std::size_t i =0; i< is.size();++i)
-      ret[i] = HexLexer::forward( is[i] );
-    return ret;
   }
 
   static constexpr char* vals_ = "0123456789abcdef";
 };
 
+typedef BasicLexer< HexAlphabet > HexLexer;
 #endif // #ifndef LEXER_HH 

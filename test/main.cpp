@@ -10,6 +10,8 @@
 #include "neural_network.hh"
 #include "neural_network_io.hh"
 
+#include "lexer.hh"
+
 
 
 void matrix_test ( Matrix<double> &m )
@@ -98,6 +100,16 @@ int main ( int argc, char** argv )
 
     NNetwork< double > nn(4,2);
     test_nn(nn);
+
+    std::string alpha_test_str = "uf 123 nawnnv48qwawoieh";
+    for ( auto e : alpha_test_str)
+      if( e != AlphaLexer::backward( AlphaLexer::forward(e) ) )
+        std::cout<< e << "!=" << AlphaLexer::backward( AlphaLexer::forward(e) ) << std::endl;
+
+    std::string hex_test_str = "1234567890abcdef";
+    for ( auto e : hex_test_str)
+      if ( e != HexLexer::backward( HexLexer::forward(e) ) ) 
+        std::cout<< e <<"!="<<HexLexer::backward( HexLexer::forward(e) ) <<std::endl ; 
 
     return 0;
 }

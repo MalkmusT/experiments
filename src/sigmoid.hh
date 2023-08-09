@@ -24,8 +24,6 @@ void sig_prime ( double &i )
   i = i * ( 1.0 - i );
 }
 
-
-
 // general version of sigmoid and derivative
 // ----------------------------------------
 

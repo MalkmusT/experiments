@@ -78,7 +78,7 @@ public:
       weights_(arg, help);
       help -= biases_;
 
-      weights_ -= alpha * (sigmoid( help) * sig_prime( help) );
+      weights_ -= alpha * sig_sig_prime( help);
       biases_ -= alpha * ( sigmoid( help) * sig_prime( help) );
   }
 

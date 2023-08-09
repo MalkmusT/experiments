@@ -106,7 +106,6 @@ int main ( int argc, char** argv )
       if( e != AlphaLexer::backward( AlphaLexer::forward(e) ) )
         std::cout<< e << "!=" << AlphaLexer::backward( AlphaLexer::forward(e) ) << std::endl;
     std::string alpha_res = AlphaLexer::backward( AlphaLexer::forward( alpha_test_str ) );
-    std::cout << alpha_res <<std::endl;
 
     std::string hex_test_str = "1234567890abcdef";
     for ( auto e : hex_test_str)

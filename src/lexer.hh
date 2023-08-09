@@ -72,4 +72,48 @@ struct HexAlphabet
 };
 
 typedef BasicLexer< HexAlphabet > HexLexer;
+
+
+
+template< class T >
+struct HashLexer
+{
+  typedef std::vector<T> WordType;
+  typedef std::vector< std::size_t > IndexType;
+
+  HashLexer () {}
+
+  std::size_t add ( const T& t )
+  {
+    std::size_t k = vals_.size();
+    vals_.push_back( t );
+    valMap_[ t ] = k;
+    return k;
+  }
+
+  std::size_t forward ( const T& i ) const { return valMap_[i]; }
+  T backward ( std::size_t i ) const { return vals_[i]; }
+
+  WordType backward ( const IndexType &is ) const
+  {
+    WordType ret; ret.resize(is.size());
+    for(std::size_t i =0; i< is.size();++i)
+      ret[i] = backward( is[i] );
+    return ret;
+  }
+
+  IndexType forward ( const WordType &is ) const
+  {
+    IndexType ret; ret.resize(is.size());
+    for(std::size_t i =0; i< is.size();++i)
+      ret[i] = forward( is[i] );
+    return ret;
+  }
+
+  // thoese two should differ bewtween the implementations
+  std::size_t size() const { return vals_.size(); }
+protected:
+  std::vector< T > vals_;
+  std::map< T, std::size_t > valMap_;
+};
 #endif // #ifndef LEXER_HH 

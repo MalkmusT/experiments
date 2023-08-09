@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <assert.h>
 
 #include "vector.hh"
@@ -9,15 +10,8 @@
 #include "neural_network_io.hh"
 
 
-template< class T >
-struct NN_Initializor 
-{
-    T operator() ( std::size_t i ) const { return T(i); }
-    T operator() ( std::size_t i, std::size_t j ) const { return T(i+j); }
-};
 
-
-void matrix_test ( Matrix<double> &m ) 
+void matrix_test ( Matrix<double> &m )
 {
   Matrix<double> mcopy(m);
 
@@ -32,7 +26,24 @@ void matrix_test ( Matrix<double> &m )
   Vector<double> v1, v2;
   v1.resize( m.cols() );
   m(v1, v2);
-  std::cout << m << std::endl;
+
+  std::cout<<m <<std::endl;
+  {
+    std::ofstream file;
+    file.open( "tmp2" );
+    file << m << std::endl;
+    file.close();
+  }
+  {
+    std::ifstream file;
+    file.open( "tmp2" );
+    file >> mcopy;
+    file.close();
+  }
+
+  std::cout<<mcopy <<std::endl;
+
+//  std::remove( "tmp" );
 }
 
 void vector_test ( Vector<double> &v )
@@ -43,6 +54,21 @@ void vector_test ( Vector<double> &v )
 
   v_copy.resize( 1 );
   assert( v_copy.size() != v.size() );
+
+  {
+    std::ofstream file;
+    file.open( "tmp" );
+    file << v << std::endl;
+    file.close();
+  }
+  {
+    std::ifstream file;
+    file.open( "tmp" );
+    file >> v_copy;
+    file.close();
+  }
+
+  std::remove( "tmp" );
 }
 
 void sigmoid_test ( double a, const Vector< double> &va, const Matrix< double> &ma)
@@ -61,14 +87,15 @@ void sigmoid_test ( double a, const Vector< double> &va, const Matrix< double> &
 
 void test_nn ( NNetwork< double > &nn )
 {
-    nn.resize(16,5);
-    NN_Initializor< double > initializor;
+  std::size_t rows = 16, cols = 5;
+    nn.resize(rows,cols);
+    NN_Initializor< double > initializor(rows,cols);
     nn.init(initializor);
-    Vector< double> arg(5), dest(16);
+    Vector< double> arg(cols), dest(rows);
     nn( arg, dest );
     nn.feedForward( arg, dest );
 
-    NN_Random_Init<double> initRand(-1);
+    NN_Random_Init<double> initRand(rows,cols, 42);
     nn.init( initRand );
 }
 

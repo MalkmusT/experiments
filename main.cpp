@@ -3,7 +3,7 @@
 #include "vector.hh"
 #include "matrix.hh"
 #include "sigmoid.hh"
-#include "neural_netwok.hh"
+#include "neural_network.hh"
 
 
 int main ( int argc, char** argv )

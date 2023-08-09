@@ -24,26 +24,21 @@ class NNetwork
     typedef Matrix<T> DataType;
     
     NNetwork () {}
+    NNetwork ( const ThisType &other ) :
+      weights_( other.weights_ ),
+      biases_( other.biases_ )
+    {}
 
     NNetwork ( std::size_t rows, std::size_t cols )
     {
         this->resize( rows, cols );
     }
 
-    NNetwork ( const DataType &weights, const ObjectType &bias )
-    :   weights_( weights ),
-        biases_( bias )
-    {}
-
-    template< class Lambda >
-    void init ( Lambda l ) 
+    template< class L >
+    void init ( L l )
     {
-        for(std::size_t j = 0; j <  weights_.cols(); ++j ) 
-        {           
-            biases_[j] = l(j);
-            for(std::size_t k = 0; k <  weights_.rows(); ++k )
-                weights_[k][j] = l(k,j);            
-        }
+      biases_ = l.bias(1);
+      weights_ = l.weights(1);
     }
 
     DataType & weights () { return weights_; }
@@ -169,7 +164,7 @@ std::ostream &operator<<(std::ostream &os, const NNetwork<T> &input)
 template<class T>
 std::istream &operator>>(std::istream &is, NNetwork<T> &output)
 {
-    is >> output.weigths();
+    is >> output.weights();
     is >> output.bias();
     return is;
 }

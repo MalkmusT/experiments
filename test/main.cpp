@@ -5,7 +5,8 @@
 #include "matrix.hh"
 #include "sigmoid.hh"
 
-#include "neural_netwok.hh"
+#include "neural_network.hh"
+#include "neural_network_io.hh"
 
 
 template< class T >
@@ -31,6 +32,7 @@ void matrix_test ( Matrix<double> &m )
   Vector<double> v1, v2;
   v1.resize( m.cols() );
   m(v1, v2);
+  std::cout << m << std::endl;
 }
 
 void vector_test ( Vector<double> &v )
@@ -62,9 +64,12 @@ void test_nn ( NNetwork< double > &nn )
     nn.resize(16,5);
     NN_Initializor< double > initializor;
     nn.init(initializor);
-    Vector< double> arg(15), dest(15);
+    Vector< double> arg(5), dest(16);
     nn( arg, dest );
     nn.feedForward( arg, dest );
+
+    NN_Random_Init<double> initRand(-1);
+    nn.init( initRand );
 }
 
 

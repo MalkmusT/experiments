@@ -58,13 +58,13 @@ public:
     return ret;
   }
 
-  void operator* ( const FieldType &t )
+  void operator*= ( const FieldType &t )
   {
     for( std::size_t i=0; i < data_.size(); ++i )
       data_[i] *= t;
   }
 
-  void operator/ ( const FieldType &t )
+  void operator/= ( const FieldType &t )
   {
     for( std::size_t i=0; i < data_.size(); ++i )
       data_[i] /= t;

@@ -71,15 +71,19 @@ public:
   }
 
   // compute new weights an biases using MQF
-  void feedBackward ( const ArgumentType &arg, const ObjectType &dest )
+  void feedBackward ( const ArgumentType &arg, const ObjectType &dest, T alpha  = 0.5 )
   {
-      T alpha = 0.5;
-      ObjectType help(dest);
-      weights_(arg, help);
-      help -= biases_;
+    // compute forward propagation
+    ObjectType help(dest);
+    feedForward( arg, help );
 
-      weights_ -= alpha * dtf_( help);
-      biases_ -= alpha * ( dtf_( help) );
+    dtf_( help );
+    help *= alpha;
+
+    for ( std::size_t i = 0; i < weights_.rows() ; ++i )
+      for ( std::size_t j = 0; j < weights_.cols() ; ++j )
+        weights_[i][j] -= help;
+    biases_ -= help;
   }
 
 private:
